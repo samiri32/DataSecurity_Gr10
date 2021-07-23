@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Client
 {
-    public partial class Form1 : Form
+    public partial class Register : Form
     {
         Socket clientSocket;
         RSACryptoServiceProvider objRsa = new RSACryptoServiceProvider();
@@ -28,7 +28,7 @@ namespace Client
             return new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         }
 
-        public Form1()
+        public Register()
         {
             InitializeComponent();
             clientSocket = socket();
@@ -57,43 +57,32 @@ namespace Client
 
         private void button1_Click(object sender, EventArgs e)
         {
-            /*if (textBox1.Text != "" && textBox2.Text != "")
+            if(textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "")
             {
-              
                 send();
-                
+           
 
             }
             else
-            {*/
+            {
                 this.label3.Text = "Të gjitha fushat duhet të plotësohen!";
-           /* }*/
+            }
         }
 
         private void send()
         {
-            string username = textBox1.Text;
-            string password = textBox2.Text;
-            string login = "1";
+            string fullname = textBox1.Text;
+            string username = textBox2.Text;
+            string password = textBox3.Text;
+            string register = "2";
 
-            string msg =  username + "." + password + "." + login;
+            string msg = fullname + "." + username + "." + password + "." + register;
 
             //msg = encrypt(msg);
-            
             byte[] data = Encoding.Default.GetBytes(msg);
             clientSocket.Send(data, 0, data.Length, 0);
+        }
+
        
-        }
-
-        
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-           
-            Register reg = new Register();
-            reg.Show();
-        }
-
-        
     }
 }

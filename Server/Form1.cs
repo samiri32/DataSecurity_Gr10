@@ -35,7 +35,7 @@ namespace Server
             InitializeComponent();
            
            
-    }
+         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
@@ -51,41 +51,45 @@ namespace Server
         {
 
             serverSocket = socket();
-            serverSocket.Bind(new IPEndPoint(0, 1200));
-            
-            MessageBox.Show("Serveri filloi te degjoj ne portin 3");
 
-            
+            IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 12000);
 
+           //Ruajtja e connection qe e marrim
+            serverSocket.Bind(endpoint);   //lidhja e cdo connection ne mberritje
+
+            MessageBox.Show("Serveri po ndegjon ne portin 12000.");
+
+            IPEndPoint derguesi = new IPEndPoint(IPAddress.Any, 12000);   //Lidhje e cdo pajisjeje(klienti) me qfardo IP dhe porti: 12000
+            EndPoint tempRemote = derguesi;     //variabla qe e ruan 
+
+       
             while (true)
-                {
+            {
+               
+                byte[] buffer = new byte[2048];
+                int rec = serverSocket.ReceiveFrom(buffer, ref tempRemote);
 
-                    try
-                    {
+                Array.Resize(ref buffer, rec);
 
-                        byte[] buffer = new byte[2048];
-                        int rec = serverSocket.Receive(buffer, 0, buffer.Length, 0);
+                string data = Encoding.Default.GetString(buffer);
+                textBox1.Text = data;
 
-                        Array.Resize(ref buffer, rec);
-
-                        string data = Encoding.Default.GetString(buffer);
-                        MessageBox.Show(data);
-                        //data = decrypt(data);
-
-                        //string[] list = data.Split('.');
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Connection lost");
-                        Application.Exit();
-                    }
-                }
-            
             }
+        }
 
-        private void textBox1_TextChanged_1(object sender, EventArgs e)
+      
+
+        private void send()
         {
 
+            string msg = "OK";
+
+            //msg = encrypt(msg);
+            byte[] data = Encoding.Default.GetBytes(msg);
+            serverSocket.Send(data, 0, data.Length, 0);
         }
+
+
+
     }
     }
