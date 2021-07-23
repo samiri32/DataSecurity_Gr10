@@ -60,8 +60,8 @@ namespace Client
             if(textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "")
             {
                 send();
-           
 
+                Dispose();
             }
             else
             {

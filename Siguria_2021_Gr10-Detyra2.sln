@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{6820916A-A85E-4982-8249-4B50B02F5F16}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{6A0E8884-35F7-40E2-B2BD-AB3728C8A5AD}"
+	ProjectSection(SolutionItems) = preProject
+		.cs = .cs
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{3CF3C002-DECD-47A1-A55A-4E73BD494BBB}"
 EndProject
