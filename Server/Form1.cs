@@ -16,12 +16,14 @@ namespace Server
         {
 
             InitializeComponent();
-            Server s1 = new Server();
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("eqr");
+            Serveri s1 = new Serveri();
+
+            MessageBox.Show("Serveri po degjon ne portin 12000");
         }
     }
 }

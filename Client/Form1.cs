@@ -19,11 +19,12 @@ namespace Client
     public partial class Form1 : Form
     {
         public static string useri;
-        Client c1;
+        Clienti c1;
         public Form1()
         {
-            c1 = new Client();
+           
             InitializeComponent();
+             c1 = new Clienti();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -63,7 +64,8 @@ namespace Client
 
         private void button1_Click(object sender, EventArgs e)
         {
-            c1.ClientSend("qwerqw");
+            c1.ClientSend("Arbresha");
+            c1.DekriptoPergjigjen();
         }
     }
     }

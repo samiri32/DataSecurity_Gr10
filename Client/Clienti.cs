@@ -7,19 +7,18 @@ using System.Windows.Forms;
 
 namespace Client
 {
-    public class Client
+    public class Clienti
     {
         static RSACryptoServiceProvider objRsa = new RSACryptoServiceProvider();
         static DESCryptoServiceProvider objDes = new DESCryptoServiceProvider();
         byte[] InitialVector;
         byte[] sharedKey;
         public UdpClient udpClient;
-        public Client()
+        public Clienti()
         {
             udpClient = new UdpClient();
             udpClient.Connect("localhost", 12000);
-            ClientSend("O SAMIR O OEWQRJKLQWJHLTJHLWQTLKJH:LKWQJT");
-            DekriptoPergjigjen();
+            
         }
         public void requestToServer()
         {

@@ -10,16 +10,17 @@ using System.Net.Sockets;
 using System.Net;
 using System.Xml;
 using System.Security.Cryptography.Xml;
+using System.Windows.Forms;
 
 namespace Server
 {
-    public class Server
+    public class Serveri
     {
         private UdpClient udpClient;
         static RSACryptoServiceProvider objRsa = new RSACryptoServiceProvider();
         static DESCryptoServiceProvider objDes = new DESCryptoServiceProvider();
         public static string test;
-        public Server()
+        public Serveri()
         {
             udpClient = new UdpClient(12000);
             Task.Run(serverThread);
@@ -28,6 +29,7 @@ namespace Server
 
         public void serverThread()
         {
+            
             while (true)
             {
                 IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
@@ -36,7 +38,8 @@ namespace Server
                 string mesazhi = base64;
                 if (mesazhi != null)
                 {
-                    String msg = mesazhi;
+                    MessageBox.Show(mesazhi);
+                    String msg = "Serveri: simnica";
                     udpClient.Send(Encoding.UTF8.GetBytes(msg), Encoding.UTF8.GetBytes(msg).Length, RemoteIpEndPoint);
                 }
 
