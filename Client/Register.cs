@@ -22,7 +22,6 @@ namespace Client
         Socket klienti;
         byte[] ClientKey;
         byte[] ClientInitialVector;
-        public static string useri;
         Clienti c1;
 
         public Register()
@@ -44,27 +43,16 @@ namespace Client
             string fullname = textBox1.Text;
             string username = textBox2.Text;
             string password = textBox3.Text;
-            
             string mesazhi = fullname+"."+username + "." + password + "." + "2";
-            
             string msg = c1.encrypt(mesazhi);
-            IPEndPoint remoteIPEndPoint = new IPEndPoint(IPAddress.Any, 0);
             c1.udpClient.Send(Encoding.UTF8.GetBytes(msg), Encoding.UTF8.GetBytes(msg).Length);
 
-            //accept info from server
             Hide();
             Form1 form1 = new Form1();
             form1.ShowDialog();
             form1.Dispose();
             Show();
 
-           
-
-            /* string[] array = pergjigjja.Split('?');
-             if (array[0].Equals("OK"))
-             {
-                 MessageBox.Show("Kredencialet jane ne rregull por duhet te verifikoni nenshkrimin");
-             }*/
         }
     }
 }

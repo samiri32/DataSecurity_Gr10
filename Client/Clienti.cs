@@ -14,13 +14,9 @@ namespace Client
         X509Certificate2 certifikata = new X509Certificate2();
         RSACryptoServiceProvider objRSA = new RSACryptoServiceProvider();
         DESCryptoServiceProvider objDES = new DESCryptoServiceProvider();
-        Socket klienti;
         byte[] ClientKey;
         byte[] ServerInitialVector;
 
-        
-        byte[] InitialVector;
-        byte[] sharedKey;
         public UdpClient udpClient;
         public Clienti()
         {
@@ -40,7 +36,7 @@ namespace Client
 
             objDES.Mode = CipherMode.CBC;
             objDES.Padding = PaddingMode.PKCS7;           
-            var cert = new X509Certificate2(System.IO.File.ReadAllBytes("C:\\Users\\Asus\\Desktop\\server.crt"));
+            var cert = new X509Certificate2(System.IO.File.ReadAllBytes("C:\\Users\\Meshira\\Desktop\\server.crt"));
 
             RSA rsa = (RSA)cert.PublicKey.Key;
 
@@ -58,47 +54,81 @@ namespace Client
             byte[] byteCiphertext = ms.ToArray();
 
             string iv = Convert.ToBase64String(ServerInitialVector);
-            string key = Convert.ToBase64String(ClientKey);
             string ciphertxt = Convert.ToBase64String(byteCiphertext);
             string encryptedkey = Convert.ToBase64String(byteKey);
 
             return iv + "." + encryptedkey + "." + ciphertxt;
-           
-
 
         }
-        /*public string DekriptoPergjigjen(string ciphertext)
+        
+         public string decrypt(string todecrypt)
         {
-            string[] info = ciphertext.Split();
-
+            
+            string[] info = todecrypt.Split('.');
             ClientKey = Convert.FromBase64String(info[1]);
-            ClientIV = Convert.FromBase64String(info[0]);
+            ServerInitialVector = Convert.FromBase64String(info[0]);
 
-            objDES.IV = ClientIV;
+            objDES.Key = ClientKey;
+            objDES.IV = ServerInitialVector;
 
             objDES.Padding = PaddingMode.PKCS7;
             objDES.Mode = CipherMode.CBC;
 
-            var myDocs = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            var keyPath = Path.Combine(myDocs, "arbresha", "server.xml");
-            StreamReader sr = new StreamReader(keyPath);
-            string xmlParams = sr.ReadToEnd();
-            objRSA.FromXmlString(xmlParams);
 
-            byte[] byteKey = objRSA.Decrypt(Convert.FromBase64String(info[1]), RSAEncryptionPadding.Pkcs1);
-            objDES.Key = byteKey;
-            byte[] byteCipherText = Convert.FromBase64String(info[2]);
-            MemoryStream ms = new MemoryStream(byteCipherText);
+            byte[] encryptedResponse = Convert.FromBase64String(info[2]);
+            MemoryStream ms = new MemoryStream(encryptedResponse);
             CryptoStream cs = new CryptoStream(ms, objDES.CreateDecryptor(), CryptoStreamMode.Read);
 
-            byte[] byteTextiDekriptuar = new byte[ms.Length];
-            cs.Read(byteTextiDekriptuar, 0, byteTextiDekriptuar.Length);
+            byte[] decryptedResponse = new byte[ms.Length];
+            cs.Read(decryptedResponse, 0, decryptedResponse.Length);
             cs.Close();
 
-            string decryptedText = Encoding.UTF8.GetString(byteTextiDekriptuar);
-            return decryptedText;
-        }*/
+            string pergjigjaDekriptuar = Encoding.UTF8.GetString(decryptedResponse);
+            return pergjigjaDekriptuar;
+        }
 
+        // public static void VerifyXml(XmlDocument xmlDoc, RSA key){
+        //     CspParameters cspParams = new CspParameters();
+        //     cspParams.KeyContainerName = "XML_DSIG_RSA_KEY";
+
+        //     RSACryptoServiceProvider rsaKey = new RSACryptoServiceProvider(cspParams);
+
+        //     XmlDocument xmlDoc = new XmlDocument();
+
+        //     xmlDoc.PreserveWhitespace = true;
+        //     xmlDoc.Load("test.xml");
+
+        //     Console.WriteLine("Verifying signature...");
+        //     bool result = VerifyXml(xmlDoc, rsaKey);
+
+        //     if (result)
+        //     {
+        //         Console.WriteLine("The XML signature is valid.");
+        //     }
+        //     else
+        //     {
+        //         Console.WriteLine("The XML signature is not valid.");
+        //     }
+        
+
+        //   SignedXml signedXml = new SignedXml(xmlDoc);
+        //   XmlNodeList nodeList = xmlDoc.GetElementsByTagName("Signature");
+
+        // if (nodeList.Count <= 0)
+        // {
+        //     throw new CryptographicException("Verification failed: No Signature was found in the document.");
+        // }
+
+        // if (nodeList.Count >= 2)
+        // {
+        //     throw new CryptographicException("Verification failed: More that one signature was found for the document.");
+        // }
+
+        // signedXml.LoadXml((XmlElement)nodeList[0]);
+
+
+        // return signedXml.CheckSignature(key);
+        // }
     }
 }
 

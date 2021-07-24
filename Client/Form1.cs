@@ -26,14 +26,14 @@ namespace Client
         Socket klienti;
         byte[] ClientKey;
         byte[] ClientInitialVector;
-        public static string useri;
-        Clienti c1;
+
+        Clienti c2;
 
         public Form1()
         {
 
             InitializeComponent();
-            c1 = new Clienti();
+            c2 = new Clienti();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -73,21 +73,14 @@ namespace Client
             string username = textBox1.Text;
             string password = textBox2.Text;
             string mesazhi = username + "." + password + "." + "1";
-            string msg = c1.encrypt(mesazhi);
-            IPEndPoint remoteIPEndPoint = new IPEndPoint(IPAddress.Any, 0);
-            c1.udpClient.Send(Encoding.UTF8.GetBytes(msg), Encoding.UTF8.GetBytes(msg).Length);
+            string msg = c2.encrypt(mesazhi);
+            c2.udpClient.Send(Encoding.UTF8.GetBytes(msg), Encoding.UTF8.GetBytes(msg).Length);
 
             //accept info from server
+             IPEndPoint remoteIPEndPoint = new IPEndPoint(IPAddress.Any, 0);
+            string response = Encoding.UTF8.GetString(c2.udpClient.Receive(ref remoteIPEndPoint));
+            MessageBox.Show(c2.decrypt(response));
             
-            DESCryptoServiceProvider desKlient = new DESCryptoServiceProvider();
-            string response = Encoding.UTF8.GetString(c1.udpClient.Receive(ref remoteIPEndPoint));
-
-            
-           /* string[] array = pergjigjja.Split('?');
-            if (array[0].Equals("OK"))
-            {
-                MessageBox.Show("Kredencialet jane ne rregull por duhet te verifikoni nenshkrimin");
-            }*/
         }
     }
 }
