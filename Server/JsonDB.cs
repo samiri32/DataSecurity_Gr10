@@ -17,16 +17,27 @@ namespace Server
             this._filename = filename;
         }
 
-        public bool AddUser(User user)
+        public void AddUser(User user)
         {
-
-            string json = JsonConvert.SerializeObject(user);
-            using (StreamWriter sw = File.AppendText(_filename))
+            List<User> users = new List<User>()
             {
-                sw.WriteLine(json);
+                user,
+
+            };
+            string json = JsonConvert.SerializeObject(users, Formatting.Indented);
+
+            if (!File.Exists(_filename))
+                File.AppendAllText(_filename, json);
+            else
+            {
+                
+                File.AppendAllText(_filename, json);
+                string text = File.ReadAllText(_filename);
+                text = text.Replace("][", ",");
+                File.WriteAllText(_filename, text);
+                
             }
 
-            return false;
         }
 
         public User FindByUsername(string username)

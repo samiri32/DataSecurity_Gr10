@@ -24,10 +24,11 @@ namespace Server
         byte[] ServerKey;
         byte[] ServerInitialVector;
         public static string test;
-       
+        JsonDB db = new JsonDB("C:\\Users\\Asus\\source\\repos\\Siguria_2021_Gr10-Detyra2\\Server\\users.json");
         public Serveri()
         {
             udpClient = new UdpClient(12000);
+            
             Task.Run(serverThread);
         }
       
@@ -43,9 +44,35 @@ namespace Server
                 string mesazhi = decrypt(base64);
                 if (mesazhi != null)
                 {
-                    MessageBox.Show(mesazhi);
-                   // String msg = "Serveri: simnica";
-                   // udpClient.Send(Encoding.UTF8.GetBytes(msg), Encoding.UTF8.GetBytes(msg).Length, RemoteIpEndPoint);
+                   
+                        string[] arr = mesazhi.Split('.');
+                    switch (arr[2])
+                    {
+                        case "1":
+                            if (arr.Length == 3)
+                            {
+                                string username = arr[0];
+                                string password = arr[1];
+
+                            }
+
+                            break;
+
+                        default:
+                            if (arr.Length == 4)
+                            {
+                                string fullname = arr[0];
+                                string username = arr[1];
+                                string password = arr[2];
+                                db.AddUser(new User(fullname, username, password));
+                            }
+                            break;
+                    
+                        }
+                    
+                    
+                    // String msg = "Serveri: simnica";
+                    // udpClient.Send(Encoding.UTF8.GetBytes(msg), Encoding.UTF8.GetBytes(msg).Length, RemoteIpEndPoint);
                 }
 
             }

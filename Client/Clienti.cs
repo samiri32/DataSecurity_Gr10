@@ -39,10 +39,7 @@ namespace Client
             ServerInitialVector = objDES.IV;
 
             objDES.Mode = CipherMode.CBC;
-            objDES.Padding = PaddingMode.PKCS7;
-
-          
-           
+            objDES.Padding = PaddingMode.PKCS7;           
             var cert = new X509Certificate2(System.IO.File.ReadAllBytes("C:\\Users\\Asus\\Desktop\\server.crt"));
 
             RSA rsa = (RSA)cert.PublicKey.Key;

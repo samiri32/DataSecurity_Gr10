@@ -47,11 +47,6 @@ namespace Client
 
         private void label3_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
             Hide();
             Register signupForm = new Register();
             signupForm.ShowDialog();
@@ -59,6 +54,7 @@ namespace Client
             Show();
         }
 
+        
         private void label2_Click(object sender, EventArgs e)
         {
 

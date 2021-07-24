@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,74 +16,55 @@ namespace Client
 {
     public partial class Register : Form
     {
-        Socket clientSocket;
-        RSACryptoServiceProvider objRsa = new RSACryptoServiceProvider();
-        DESCryptoServiceProvider objDes = new DESCryptoServiceProvider();
-        //X509Certificate2 certifikata = new X509Certificate2();
-        string key;
-        string IV;
-
-
-        Socket socket()
-        {
-            return new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        }
+        X509Certificate2 certifikata = new X509Certificate2();
+        RSACryptoServiceProvider objRSA = new RSACryptoServiceProvider();
+        DESCryptoServiceProvider objDES = new DESCryptoServiceProvider();
+        Socket klienti;
+        byte[] ClientKey;
+        byte[] ClientInitialVector;
+        public static string useri;
+        Clienti c1;
 
         public Register()
         {
+
             InitializeComponent();
-            clientSocket = socket();
-            connect();
-
+            c1 = new Clienti();
         }
 
-        private void connect()
+        private void Form1_Load(object sender, EventArgs e)
         {
-            string ipaddress = "127.0.0.1";
-            int portNumber = 12000;
 
-            try
-            {
-                IPEndPoint ep = new IPEndPoint(IPAddress.Parse(ipaddress), portNumber);
-                clientSocket.Connect(ep);
-
-            }
-            catch
-            {
-                MessageBox.Show("Connection Failed");
-            }
         }
-
 
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if(textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "")
-            {
-                send();
-
-                Dispose();
-            }
-            else
-            {
-                this.label3.Text = "Të gjitha fushat duhet të plotësohen!";
-            }
-        }
-
-        private void send()
-        {
+            //send info to server
             string fullname = textBox1.Text;
             string username = textBox2.Text;
             string password = textBox3.Text;
-            string register = "2";
+            
+            string mesazhi = fullname+"."+username + "." + password + "." + "2";
+            
+            string msg = c1.encrypt(mesazhi);
+            IPEndPoint remoteIPEndPoint = new IPEndPoint(IPAddress.Any, 0);
+            c1.udpClient.Send(Encoding.UTF8.GetBytes(msg), Encoding.UTF8.GetBytes(msg).Length);
 
-            string msg = fullname + "." + username + "." + password + "." + register;
+            //accept info from server
+            Hide();
+            Form1 form1 = new Form1();
+            form1.ShowDialog();
+            form1.Dispose();
+            Show();
 
-            //msg = encrypt(msg);
-            byte[] data = Encoding.Default.GetBytes(msg);
-            clientSocket.Send(data, 0, data.Length, 0);
+           
+
+            /* string[] array = pergjigjja.Split('?');
+             if (array[0].Equals("OK"))
+             {
+                 MessageBox.Show("Kredencialet jane ne rregull por duhet te verifikoni nenshkrimin");
+             }*/
         }
-
-       
     }
 }
